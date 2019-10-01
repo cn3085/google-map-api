@@ -100,7 +100,7 @@
 
         // Perform a nearby search.
         service.nearbySearch(
-            {location: pyrmont, radius: 500, type: ['store']},
+            {location: pyrmont, radius: 500, type: ['store'], name:'순대'},
             function(results, status, pagination) {
               if (status !== 'OK') return;
 

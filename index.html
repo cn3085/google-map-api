@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <style>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <style media="(min-width:1000px)">
         #map{
             height: 100%;
         }
@@ -14,69 +15,242 @@
             height: 100%;
             margin: 0;
             padding: 0;
+        }
+
+      #search{
+        position: absolute;
+        right: 5px;
+        top: 5%;
+        margin-top: 0px;
+        width: 300px;
+        height: 800px;
+        padding: 0px;
+        z-index: 5;
+        border: 1px solid #999;
+        background: #fff;
+        overflow-y: scroll;
+      }
+
+      input[type=text]{
+        padding: 0px;
+        margin : 0px;
+      }
+
+      #searching-box{
+          display: inline-block;
+          width: 240px;
+      }
+
+      ul{
+          padding: 0;
+      }
+
+      li{
+        list-style: none;
+        border: 1px solid;
+      }
+
+      @media (max-width:1000px) {
+        #search{
+            width: ;
+            height: ;
+            
+        }
       }
     </style>
 </head>
 <body>
         <div id="map"></div>
+        <div id="search">
+            <div>
+                <input type="text" id="searching-box" name="keyword">
+                <input type="button" id ="search-btn" value="검색">
+            </div>
+            <div>
+                <label for="cb-cafe">카페
+                    <input type="checkbox" id= "cb-cafe" name="type" value="cafe">
+                </label>
+                <label for="cb-restaurant">음식점
+                    <input type="checkbox" id= "cb-restaurant" name="type" value="restaurant">
+                </label>
+                <label for="cb-shopping_mall">쇼핑몰
+                    <input type="checkbox" id= "cb-shopping_mall" name="type" value="shopping_mall">
+                </label>
+            </div>
+            <ul id ="result-list"></ul>
+        </div>
+
         <script>
           var map;
+          var markerArr = [];
+          var cityCircle = null;
+
           function initMap() {
-            var curLatLng = {
-                lat: 37.482506,
-                lng: 126.894424
+              var curLatLng = {
+                  lat: 37.482506,
+                  lng: 126.894424
+                }
+                
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: curLatLng,
+                    zoom: 15
+                });
+                
+                Search.placeInit(map);
+                
+                var marker = new google.maps.Marker({
+                    position : curLatLng,
+                    map : map,
+                    title : 'Hello World',
+                    info : 'elTOV입니다'
+                })
+
+                markerArr.push(marker);
+                
+                var content = '<h3>엘토브다</h3>'
+                +'<p>IT회사</p>'
+                +'<p>전화번호 : 02-111-1111</p>';
+                
+                var infoWindow = new google.maps.InfoWindow({content : content})
+                    
+                EventBinder.jq('search-btn', 'click', Search.doSearching);
+
+                
+                _map.event.drawingCircle();
+                _map.event.drawingCircleLikeMove();
+            }
+            
+            const Search = {
+                place : null,
+                placeInit : function(map){
+                    this.place = new google.maps.places.PlacesService(map);
+                },
+                doSearching : function(){
+                    //검색 리스트 초기화
+                    Search.clearResultList();
+                    //기존의 마커 삭제
+                    Marker.deleteMarker();
+                    //검색 키워드를 가져옴
+                    let searchObj = Search.getKeyword();
+                    //검색 실행
+                    Search.sendSearchRequest(searchObj);
+                },
+                //검색어 입력 받아서 리턴하는 함수
+                getKeyword : function(){
+                    
+                    let keyword = $('#searching-box').val();
+                    let types = $("#search input:checkbox:checked").map(function(){
+                        return $(this).val();
+                    }).get();
+                    let location = map.getCenter();
+
+                    let searchObj = {
+                        location : location,
+                        radius : 800,
+                        type : types,
+                        name : keyword
+                    }
+                    
+                    return searchObj;
+                },
+                sendSearchRequest : function(searchObj){
+                    Search.place.nearbySearch(searchObj,
+                    function(results, status, pagination) {
+                        if (status !== 'OK') return;
+                        Marker.createMarker(results);
+                        })
+                },
+                addResultList : function(idx, data){
+                    let html = '<li onclick="Search.moveThisMarker(\''+idx+'\')">'
+                        +'<h4>'+data.name+'</h4>'
+                        +'<p>'+data.vicinity+'</p>'
+                        +'</li>';
+                        
+                        $('#result-list').append(html);
+                },
+                clearResultList : function(){
+                    $('#result-list').children().remove();
+                },
+                moveThisMarker : function(markerId){
+                    let marker = markerArr[markerId];
+                    map.setZoom(17);
+                    map.setCenter(marker.getPosition());
+                } 
+            }
+            
+            const _map = {
+                event : {
+                    moveCenter : function(ele){
+                        map.panTo(ele.geometry.location);
+                    },
+                    controllZoom : function(depth){
+                        map.setZoom(depth);
+                    },
+                    moveAndZoom : function(ele){
+                        ele.addListener('click', function() {
+                        map.setZoom(17);
+                        map.setCenter(ele.getPosition());
+                        });
+                    },
+                    drawingCircle : function(){
+                        cityCircle = new google.maps.Circle({
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 0.8,
+                            strokeWeight: 2,
+                            fillColor: '#FF0000',
+                            fillOpacity: 0.35,
+                            map: map,
+                            center: map.getCenter(),
+                            radius: 800
+                        });
+                    },
+                    drawingCircleLikeMove : function(){
+                        map.addListener('center_changed', () => {
+                            cityCircle.setMap(null);
+                            _map.event.drawingCircle();
+                        })
+                    }
+
+                }
             }
 
-            map = new google.maps.Map(document.getElementById('map'), {
-              center: curLatLng,
-              zoom: 15
-            });
+            const EventBinder = {
+                jq : function (ele, event, func){
+                    $('#'+ele).on(event, func)
+                },
+                map : function(ele, event, func){
+                    ele.addListener(event, func);
+                }
+            }
+            
+            const Marker = {
+                createMarker : function(place){
+                    place.forEach(function(data, idx){
+                        let marker = new google.maps.Marker({
+                            map: map,
+                            title: data.name,
+                        position: data.geometry.location
+                    });
+                    markerArr[idx] = marker;
+                    Search.addResultList(idx, data);
+                    _map.event.moveAndZoom(marker);
 
-            var marker = new google.maps.Marker({
-                position : curLatLng,
-                map : map,
-                title : 'Hello World',
-                info : 'elTOV입니다'
-            })
-
-            var content = '여기가 엘토브다';
-
-            var infoWindow = new google.maps.InfoWindow({content : content})
-
-            google.maps.event.addListener(marker, "click", function(){
-                infoWindow.open(map, marker)
-            })
-
-            // var size_x = 40; // 마커로 사용할 이미지의 가로 크기
-            // var size_y = 40; // 마커로 사용할 이미지의 세로 크기
-
-            // var image = new google.maps.MarkerImage('주소 여기에 기입',
-            //                                             new google.maps.Size(size_x, size_y),
-            //                                             '',
-            //                                             '',
-            //                                             new google.maps.Size(size_x, size_y));
-            // var address = '서울 구로디지털단지역';
-
-            // var adrsMarker = null;
-            // var geocoder = new google.maps.Geocoder();
-            // geocoder.geocode({'address':address}, function(results, status){
-            //     if(status == google.maps.GeocoderStatus.OK){
-            //         map.setCenter(results[0].geometry.location);
-            //         marker = new google.maps.Marker({
-            //             map : map,
-            //             title : '구디역',
-            //             position : results[0].geometry.location
-            //         })
-
-            //         var content = '구디역에는 구디구디구디<br/> 번호 : 9292-9292';
-            //         var infowindow = new google.maps.InfoWindow({ content: content});
-            //         google.maps.event.addListener(marker, "click", function() {infowindow.open(map,marker);});
-
-            //     } else {
-            //         alert('안 되네요.. : ' + status);
-            //     }
-            // })
+                    if(idx == 0){
+                        _map.event.moveCenter(data)
+                        _map.event.controllZoom(17);
+                    }
+                })
+            },
+            deleteMarker : function(){
+                markerArr.forEach(function(data){
+                    data.setMap(null);
+                })
+            }
           }
+        
+        
+
+
         </script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhaf46JIpfOqkkLXquUHL0SPfLMZzYJnw&callback=initMap&libraries=places"
         async defer></script>
