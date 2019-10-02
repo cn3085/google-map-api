@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <style media="(min-width:1000px)">
+    <style>
         #map{
             height: 100%;
         }
@@ -50,11 +50,39 @@
         border: 1px solid;
       }
 
-      @media (max-width:1000px) {
+      @media (max-width:400px) {
         #search{
-            width: ;
-            height: ;
-            
+            position: absolute;
+            left: 20px;
+            bottom: 5%;
+            margin-top: 0px;
+            width: 300px;
+            height: 200px;
+            padding: 0px;
+            z-index: 5;
+            border: 1px solid #999;
+            background: #fff;
+            overflow-x: scroll;
+
+            right: unset;
+            top: unset;
+            overflow-y: unset;
+        }
+
+        #result-list{
+            display: table;
+            width: 100%;
+            white-space: nowrap;
+            top: 30px;
+            position: inherit;
+        }
+
+        #result-list li{
+            display: table-cell;
+        }
+
+        #keyword-box{
+            position: fixed;
         }
       }
     </style>
@@ -62,20 +90,22 @@
 <body>
         <div id="map"></div>
         <div id="search">
-            <div>
-                <input type="text" id="searching-box" name="keyword">
-                <input type="button" id ="search-btn" value="검색">
-            </div>
-            <div>
-                <label for="cb-cafe">카페
-                    <input type="checkbox" id= "cb-cafe" name="type" value="cafe">
-                </label>
-                <label for="cb-restaurant">음식점
-                    <input type="checkbox" id= "cb-restaurant" name="type" value="restaurant">
-                </label>
-                <label for="cb-shopping_mall">쇼핑몰
-                    <input type="checkbox" id= "cb-shopping_mall" name="type" value="shopping_mall">
-                </label>
+            <div id="keyword-box">
+                <div>
+                    <input type="text" id="searching-box" name="keyword" onkeyup="pressEnterKey()">
+                    <input type="button" id ="search-btn" value="검색">
+                </div>
+                <div>
+                    <label for="cb-cafe">카페
+                        <input type="checkbox" id= "cb-cafe" name="type" value="cafe">
+                    </label>
+                    <label for="cb-restaurant">음식점
+                        <input type="checkbox" id= "cb-restaurant" name="type" value="restaurant">
+                    </label>
+                    <label for="cb-shopping_mall">쇼핑몰
+                        <input type="checkbox" id= "cb-shopping_mall" name="type" value="shopping_mall">
+                    </label>
+                </div>
             </div>
             <ul id ="result-list"></ul>
         </div>
@@ -248,7 +278,11 @@
             }
           }
         
-        
+          function pressEnterKey(){
+              if(window.event.keyCode == 13){
+                  Search.doSearching();
+              }
+          }
 
 
         </script>
