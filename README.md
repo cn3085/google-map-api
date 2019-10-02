@@ -5,15 +5,14 @@
     2. API Key 설정
     3. 사용 Lib 설명
 
- * 시나리오
-    1. 최초 엘토브 중심으로 마커 표시
-    ( 마커 title, content 표시 )
-    2. 검색창에 인천 로데오 검색
-    ( 로데오에 마커 찍힘, 거리 단위로 zoom 확대)
-    3. 음식점 type 검색 
-    ( 음식점에 아이콘 표시, 리스트 나옴, 누르면 마커 위에 content 표시 )
-    4. 술집 type 검색
-    ( 술집에 아이콘 표시, 리스트 나옴, 누르면 마커 위에 content 표시 )
-    5. 지도 중심 이동해서 현재 위치로 재검색
-    ( 술집에 아이콘 표시, 리스트 나옴, 누르면 마커 위에 content 표시 )
  * 기능 별 예제 코드
+   - map.html : 맵 생성, 마커 생성, 설명창 생성
+   - clear-marker.html : 마커 감추기, 보이기, 지우기
+   - searching.html :  장소 검색
+   - searching-with-paing.html : 주변 검색, 장소의 type, name 검색, 검색 결과 List 표시, 추가 검색(more)
+   - index.html : type, name 검색, 지도 중앙 기준 검색 반경(Circle) 표시, 마커 클릭시 중앙 위치 변경, 모바일 환경 UI 변경
+   - naver-map.html : Naver Map API 맵 생성, 마커 생성, 설명창 생성
+
+* 참고
+   - place Type : https://developers.google.com/places/web-service/supported_types?hl=ko
+   - place Data Fields : https://developers.google.com/places/web-service/place-data-fields?hl=ko

@@ -22,16 +22,20 @@
         <script>
           var map;
           function initMap() {
+
+            //위도, 경도
             var curLatLng = {
                 lat: 37.482506,
                 lng: 126.894424
             }
 
+            //맵 생성
             map = new google.maps.Map(document.getElementById('map'), {
               center: curLatLng,
               zoom: 15
             });
 
+            //마커 생성
             var marker = new google.maps.Marker({
                 position : curLatLng,
                 map : map,
@@ -41,44 +45,16 @@
 
             var content = '엘토브';
 
+            //마커 위치 설명 창 생성
             var infoWindow = new google.maps.InfoWindow({content : content})
 
+            //마커 클릭시 윈도우 Open
             google.maps.event.addListener(marker, "click", function(){
                 infoWindow.open(map, marker)
             })
-
-            // var size_x = 40; // 마커로 사용할 이미지의 가로 크기
-            // var size_y = 40; // 마커로 사용할 이미지의 세로 크기
-
-            // var image = new google.maps.MarkerImage('주소 여기에 기입',
-            //                                             new google.maps.Size(size_x, size_y),
-            //                                             '',
-            //                                             '',
-            //                                             new google.maps.Size(size_x, size_y));
-            // var address = '서울 구로디지털단지역';
-
-            // var adrsMarker = null;
-            // var geocoder = new google.maps.Geocoder();
-            // geocoder.geocode({'address':address}, function(results, status){
-            //     if(status == google.maps.GeocoderStatus.OK){
-            //         map.setCenter(results[0].geometry.location);
-            //         marker = new google.maps.Marker({
-            //             map : map,
-            //             title : '구디역',
-            //             position : results[0].geometry.location
-            //         })
-
-            //         var content = '구디역에는 구디구디구디<br/> 번호 : 9292-9292';
-            //         var infowindow = new google.maps.InfoWindow({ content: content});
-            //         google.maps.event.addListener(marker, "click", function() {infowindow.open(map,marker);});
-
-            //     } else {
-            //         alert('안 되네요.. : ' + status);
-            //     }
-            // })
           }
         </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhaf46JIpfOqkkLXquUHL0SPfLMZzYJnw&callback=initMap&libraries=places"
+        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=initMap&libraries=places"
         async defer></script>
 </body>
 </html>

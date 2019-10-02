@@ -74,9 +74,6 @@
       }
     </style>
     <script>
-      // This example requires the Places library. Include the libraries=places
-      // parameter when you first load the API. For example:
-      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
       var map;
 
@@ -93,6 +90,7 @@
         var service = new google.maps.places.PlacesService(map);
         var getNextPage = null;
         var moreButton = document.getElementById('more');
+
         moreButton.onclick = function() {
           moreButton.disabled = true;
           if (getNextPage) getNextPage();
@@ -100,7 +98,7 @@
 
         // Perform a nearby search.
         service.nearbySearch(
-            {location: pyrmont, radius: 500, type: ['store'], name:'순대'},
+            {location: pyrmont, radius: 500, type: ['store'], name:'cafe'},
             function(results, status, pagination) {
               if (status !== 'OK') return;
 
@@ -149,6 +147,6 @@
       <ul id="places"></ul>
       <button id="more">More results</button>
     </div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhaf46JIpfOqkkLXquUHL0SPfLMZzYJnw&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&libraries=places&callback=initMap" async defer></script>
   </body>
 </html>

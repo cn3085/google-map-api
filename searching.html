@@ -16,8 +16,10 @@
             padding: 0;
       }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhaf46JIpfOqkkLXquUHL0SPfLMZzYJnw&callback=initMap&libraries=places"
+    <!-- libraries=places : places 라이브러리 쓰기 위해서 추가 필요  -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=initMap&libraries=places"
     async defer></script>
+    
 </head>
 <body>
         <div id="map"></div>
@@ -35,10 +37,11 @@
                 document.getElementById('map'), {center: sydney, zoom: 15});
 
             var request = {
-            query: '%카페%',
-            fields: ['name', 'geometry'],
+                query: '카페',
+                fields: ['name', 'geometry'],
             };
 
+            // 장소검색을 위한 places service 생성
             service = new google.maps.places.PlacesService(map);
 
             service.findPlaceFromQuery(request, function(results, status) {
@@ -59,8 +62,8 @@
             });
 
             google.maps.event.addListener(marker, 'click', function() {
-            infowindow.setContent(place.name);
-            infowindow.open(map, this);
+                infowindow.setContent(place.name);
+                infowindow.open(map, this);
             });
         }
         </script>
