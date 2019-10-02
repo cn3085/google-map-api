@@ -1,9 +1,10 @@
- * Google Map API 가이드
+## Google Map API 가이드
 
- * 사용 준비
-    1. API Key 발급 절차
-    2. API Key 설정
-    3. 사용 Lib 설명
+ * API Key 발급 절차
+      - Google Map Platform 접속 : https://cloud.google.com/maps-platform/
+      - 새 프로젝트 만들기
+      - 메뉴 > API 및 서비스 > 라이브러리 > Maps JavaScript API 추가, Places API 추가
+      - 메뉴 > API 및 서비스 > 사용자 인증 정보 > 사용자 인증 정보 만들기 > 키 제한 > API 제한사항 > 제한사항 추가 > 저장
 
  * 기능 별 예제 코드
    - map.html : 맵 생성, 마커 생성, 설명창 생성
